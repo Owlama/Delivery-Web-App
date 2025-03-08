@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rush Bites - Orders</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <link rel="stylesheet" href="/css/uber-bites-style.css">
+</head>
+<body style="font-family: 'Poppins', sans-serif; background-color: #f4f4f4;">
+
+<!-- Navigation Bar -->
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<!-- Page Header -->
+<div class="container-fluid page-header py-5 text-white text-center" style="background: url('/img/food-banner.jpg') center/cover; background-color: #343a40;">
+    <h1 class="display-3">Food Orders</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center">
+            <li class="breadcrumb-item"><a href="/" class="text-light">Home</a></li>
+            <li class="breadcrumb-item active text-light" aria-current="page">Orders</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Order List Section -->
+<div class="container py-5">
+    <h2 class="text-center text-primary">Current Orders</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="bg-primary text-white">
+            <!-- navbar.html (Stylish Update) -->
+            <!DOCTYPE html>
+            <html xmlns:th="https://www.thymeleaf.org">
+            <!-- Navbar Start -->
+            <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-primary navbar-dark shadow-lg p-3 sticky-top">
+                <div class="container-fluid">
+                    <a href="/" class="navbar-brand d-flex align-items-center">
+                        <img src="/img/logo.png" alt="Logo" width="40" height="40" class="me-2">
+                        <h2 class="mb-0 text-white">Logistica</h2>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav ms-auto">
+                            <a href="/" class="nav-item nav-link text-white fw-bold">Home</a>
+                            <a href="/about" class="nav-item nav-link text-white fw-bold">About</a>
+                            <a href="/feature" class="nav-item nav-link text-white fw-bold">Vehicles</a>
+                            <a href="/add-item" class="nav-item nav-link text-white fw-bold">Add Item</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+            </html>
+
+            <!-- add-item.html -->
+            <!DOCTYPE html>
+            <html lang="en" xmlns:th="https://www.thymeleaf.org">
+            <head>
+                <meta charset="UTF-8">
+                <title>Create Item</title>
+                <link rel="stylesheet" href="/css/bootstrap.min.css">
+                <link rel="stylesheet" href="/css/style.css">
+            </head>
+            <body>
+            <nav th:replace="~{navbar :: navbar}"></nav>
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center text-primary">Create New Item</h2>
+                <form th:action="@{/post-item}" method="post" th:object="${item}" class="card p-4 shadow-lg">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Item Name</label>
+                        <input type="text" th:field="*{name}" class="form-control border-primary" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Weight</label>
+                        <input type="number" step="0.01" th:field="*{weight}" class="form-control border-primary" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Item</button>
+                </form>
+            </div>
+            </body>
+            </html>
+
+            <!-- feature.html (Updated) -->
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center text-primary">Vehicle Management</h2>
+                <table class="table table-bordered table-hover shadow-lg">
+                    <thead class="bg-primary text-white">
+                    <tr>
+                        <th>Vehicle Name</th>
+                        <th>Plate Number</th>
+                        <th>Status</th>
+                        <th>Carrying Weight</th>
+                        <th>Remaining Weight</th>
+                        <th>Items</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="vehicle : ${allVehicles}">
+                        <td th:text="${vehicle.name}"></td>
+                        <td th:text="${vehicle.plateNumber}"></td>
+                        <td><span class="badge bg-success px-3 py-2" th:text="${vehicle.status}"></span></td>
+                        <td th:text="${vehicle.carryingWeight}"></td>
+                        <td th:text="${vehicle.carryingWeight - #aggregates.sum(vehicle.items.![weight])}"></td>
+                        <td>
+                            <table class="table table-bordered mt-2">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Item Weight</th>
+                                    <th>Item Code</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${vehicle.items}">
+                                    <td th:text="${item.name}"></td>
+                                    <td th:text="${item.weight}"></td>
+                                    <td th:text="${item.code}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+                        <tbody>
+                        <tr th:each="item : ${vehicle.items}">
+                            <td th:text="${item.name}"></td>
+                            <td th:text="${item.weight}"></td>
+                            <td th:text="${item.code}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <b>Remaining Weight:</b> <span th:text="${vehicle.carryingWeight - #aggregates.sum(vehicle.items.![weight])}"></span>
+                </td>
+            </tr>
+            <tr th:each="order : ${allOrders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.dish}"></td>
+                <td th:text="${order.restaurant}"></td>
+                <td th:text="${order.price}"></td>
+                <td th:text="${order.status}" class="fw-bold text-success"></td>
+                <td th:text="${order.deliveryTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Order Submission Form -->
+<div class="container py-5">
+    <h2 class="text-center text-primary">Place a New Order</h2>
+    <form method="post" th:action="@{/post-order}" th:object="${order}" class="row g-3">
+        <div class="col-md-6">
+            <input type="text" th:field="*{customerName}" class="form-control border-primary" placeholder="Your Name" required>
+        </div>
+        <div class="col-md-6">
+            <input type="text" th:field="*{dish}" class="form-control border-primary" placeholder="Dish Name" required>
+        </div>
+        <div class="col-md-6">
+            <input type="text" th:field="*{restaurant}" class="form-control border-primary" placeholder="Restaurant" required>
+        </div>
+        <div class="col-md-6">
+            <input type="text" th:field="*{address}" class="form-control border-primary" placeholder="Delivery Address" required>
+        </div>
+        <div class="col-md-6">
+            <input type="tel" th:field="*{phone}" class="form-control border-primary" placeholder="Phone Number" required>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-primary w-100" type="submit">Order Now</button>
+        </div>
+    </form>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-light text-center py-3">
+    <p>&copy; 2025 Rush Bites| All Rights Reserved</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>
